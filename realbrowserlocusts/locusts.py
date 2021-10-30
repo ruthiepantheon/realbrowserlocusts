@@ -14,19 +14,15 @@ class RealBrowserLocust(User):
     """
     This is the abstract User class which should be subclassed.
     """
+    abstract = True
+
     client = None
     timeout = 30
     screen_width = None
     screen_height = None
 
-    def __init__(self):
-        super(RealBrowserLocust, self).__init__()
-        if self.screen_width is None:
-            raise LocustError("You must specify a screen_width "
-                              "for the browser")
-        if self.screen_height is None:
-            raise LocustError("You must specify a screen_height "
-                              "for the browser")
+    def __init__(self, environment):
+        super(RealBrowserLocust, self).__init__(environment)
         self.proxy_server = os_getenv("LOCUST_BROWSER_PROXY", None)
 
 
@@ -43,8 +39,7 @@ class ChromeLocust(RealBrowserLocust):
         self.client = RealBrowserClient(
             webdriver.Chrome(chrome_options=options),
             self.timeout,
-            self.screen_width,
-            self.screen_height
+            (self.screen_width, self.screen_height),
         )
 
 
@@ -65,13 +60,7 @@ class HeadlessChromeLocust(RealBrowserLocust):
             options.add_argument('proxy-server={}'.format(self.proxy_server))
         driver = webdriver.Chrome(chrome_options=options)
         _LOGGER.info('Actually trying to run headless Chrome')
-        self.client = RealBrowserClient(
-            driver,
-            self.timeout,
-            self.screen_width,
-            self.screen_height,
-            set_window=False
-        )
+        self.client = RealBrowserClient(webdriver.Chrome(options=options), self.timeout)
 
 
 class FirefoxLocust(RealBrowserLocust):
@@ -83,8 +72,7 @@ class FirefoxLocust(RealBrowserLocust):
         self.client = RealBrowserClient(
             webdriver.Firefox(),
             self.timeout,
-            self.screen_width,
-            self.screen_height
+            (self.screen_width, self.screen_height),
         )
 
 
@@ -97,6 +85,5 @@ class PhantomJSLocust(RealBrowserLocust):
         self.client = RealBrowserClient(
             webdriver.PhantomJS(),
             self.timeout,
-            self.screen_width,
-            self.screen_height
+            (self.screen_width, self.screen_height),
         )

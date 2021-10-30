@@ -45,11 +45,10 @@ class RealBrowserClient(object):
     Web Driver client with Locust functionality
     """
 
-    def __init__(self, driver, wait_time_to_finish, screen_width,
-                 screen_height, set_window=True):
+    def __init__(self, driver, wait_time_to_finish, screen_dimensions=None):
         self.driver = driver
-        if set_window:
-            self.driver.set_window_size(screen_width, screen_height)
+        if screen_dimensions:
+            self.driver.set_window_size(*screen_dimensions)
         self.wait = WebDriverWait(self.driver, wait_time_to_finish)
 
     @staticmethod
