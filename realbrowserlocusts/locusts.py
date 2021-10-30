@@ -54,15 +54,13 @@ class HeadlessChromeLocust(User):
     def __init__(self, environment):
         super(HeadlessChromeLocust, self).__init__(environment)
         options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        options.add_argument('window-size={}x{}'.format(
-            self.screen_width, self.screen_height
-        ))
-        options.add_argument('disable-gpu')
+        options.add_argument("--headless")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--no-sandbox")
         if self.proxy_server:
-            _LOGGER.info('Using proxy: ' + self.proxy_server)
-            options.add_argument('proxy-server={}'.format(self.proxy_server))
-        driver = webdriver.Chrome(chrome_options=options)
+            _LOGGER.info(f"Using proxy: {self.proxy_server}")
+            options.add_argument("--proxy-server={self.proxy_server}")
         _LOGGER.info('Actually trying to run headless Chrome')
         self.client = RealBrowserClient(webdriver.Chrome(options=options), self.timeout)
 
