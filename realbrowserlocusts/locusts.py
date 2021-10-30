@@ -45,7 +45,7 @@ class ChromeLocust(RealBrowserLocust):
         )
 
 
-class HeadlessChromeLocust(RealBrowserLocust):
+class HeadlessChromeLocust(User):
     """
     Provides a headless Chrome webdriver that logs GET's and waits to locust
     """
