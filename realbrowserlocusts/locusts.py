@@ -58,11 +58,8 @@ class HeadlessChromeLocust(User):
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-extensions")
         options.add_argument("--no-sandbox")
-        if self.proxy_server:
-            _LOGGER.info(f"Using proxy: {self.proxy_server}")
-            options.add_argument("--proxy-server={self.proxy_server}")
-        _LOGGER.info('Actually trying to run headless Chrome')
-        self.client = RealBrowserClient(webdriver.Chrome(options=options), self.timeout)
+        self.client = RealBrowserClient(
+            webdriver.Chrome(options=options), self.timeout)
 
 
 class FirefoxLocust(RealBrowserLocust):
