@@ -21,7 +21,7 @@ def wrap_for_locust(request_type, name, func, *args, **kwargs):
         result = func(*args, **kwargs)
     except Exception as event_exception:
         total_time = int((time.time() - start_time) * 1000)
-        events.request_failure.fire(
+        events.request.fire(
             request_type=request_type,
             name=name,
             response_time=total_time,
@@ -31,7 +31,7 @@ def wrap_for_locust(request_type, name, func, *args, **kwargs):
         raise StopUser()
     else:
         total_time = int((time.time() - start_time) * 1000)
-        events.request_success.fire(
+        events.request.fire(
             request_type=request_type,
             name=name,
             response_time=total_time,
